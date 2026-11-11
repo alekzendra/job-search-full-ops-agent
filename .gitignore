@@ -1,0 +1,24 @@
+# Personal data & secrets - never commit
+.env
+config.json
+user_profile.json
+.onboarding_state.json
+.onboarding_profile_draft.json
+.privacy_terms
+
+# Generated artefacts
+output_resumes/
+runs/
+Tracking_Sheet.xlsx
+*.pdf
+# CVs you import during onboarding (input only: the agent writes PDFs, never DOCX)
+*.docx
+*.doc
+*.odt
+
+# Tooling
+.venv/
+__pycache__/
+.DS_Store
+.claude/settings.local.json
+.claude/scheduled_tasks*

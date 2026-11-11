@@ -1,0 +1,5 @@
+# Python 3.9+
+reportlab>=4.0,<4.4.5; python_version < "3.10"   # 1-page PDF CV renderer (tools/render_cv.py);
+reportlab>=4.0; python_version >= "3.10"         # newer releases refuse to import on Python 3.9
+jsonschema>=4.0     # config / profile / CV content validation
+pypdf>=4.0          # tests: checks the PDF text that ATS parsers will read

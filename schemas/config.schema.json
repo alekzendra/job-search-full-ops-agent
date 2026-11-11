@@ -1,0 +1,1135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/alekzendra/job-search-full-ops-agent/main/schemas/config.schema.json",
+  "title": "Job Search Full-Ops Agent — runtime configuration",
+  "description": "Operational settings: job boards, scoring, CV layout, tracking, integrations, notifications. Holds no secrets — API keys live in .env and are referenced by env-var name.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "locale",
+    "search",
+    "scoring",
+    "cv",
+    "tracking",
+    "integrations",
+    "notifications",
+    "onboarding",
+    "profile_quality"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schema_version": {
+      "const": 1
+    },
+    "locale": {
+      "type": "object",
+      "required": [
+        "timezone"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "timezone": {
+          "type": "string",
+          "description": "IANA zone, e.g. Europe/Warsaw"
+        },
+        "ui_language": {
+          "type": "string",
+          "default": "en"
+        },
+        "date_format": {
+          "type": "string",
+          "default": "YYYY-MM-DD"
+        }
+      }
+    },
+    "search": {
+      "type": "object",
+      "required": [
+        "first_run_lookback_days",
+        "max_lookback_days",
+        "boards"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "max_lookback_days": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 21,
+          "description": "Later runs cover the time since the previous run, capped at this many days (max 3 weeks)."
+        },
+        "max_jobs_per_run": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 500
+        },
+        "deduplicate_across_runs": {
+          "type": "boolean"
+        },
+        "drop_if_jd_language_not_in_profile": {
+          "type": "boolean"
+        },
+        "boards": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/board"
+          }
+        },
+        "custom_boards": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/board"
+          }
+        },
+        "company_watchlist": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "company"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "company": {
+                "type": "string"
+              },
+              "careers_url": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "uri"
+              },
+              "priority": {
+                "enum": [
+                  "A",
+                  "B",
+                  "C"
+                ]
+              },
+              "title_keywords": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "first_run_lookback_days": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1,
+          "maximum": 30,
+          "description": "How far back the first run searches (asked in onboarding Phase 3). null = ask before the first run."
+        }
+      }
+    },
+    "scoring": {
+      "type": "object",
+      "required": [
+        "min_fit_score",
+        "original_cv_ok_threshold"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "min_fit_score": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "original_cv_ok_threshold": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100,
+          "description": "'Strong match' level: highlighted in the sheet and digest. Strong matches still get their own tailored CV."
+        },
+        "strictness": {
+          "enum": [
+            "lenient",
+            "balanced",
+            "strict"
+          ]
+        },
+        "weights": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "role_and_seniority": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "hard_skills_and_tools": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "domain_and_responsibilities": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          }
+        },
+        "penalties": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "years_required_gap_per_year": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 50
+            },
+            "missing_required_language_cap": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "location_or_work_mode_mismatch": {
+              "enum": [
+                "drop",
+                "flag"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "cv": {
+      "type": "object",
+      "required": [
+        "max_pages",
+        "page_size",
+        "output_formats"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "max_pages": {
+          "const": 1,
+          "description": "Hard rule: tailored CVs are exactly one page."
+        },
+        "page_size": {
+          "enum": [
+            "A4",
+            "Letter"
+          ]
+        },
+        "margins_inch": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "top": {
+              "type": "number",
+              "minimum": 0.3,
+              "maximum": 1.5
+            },
+            "bottom": {
+              "type": "number",
+              "minimum": 0.3,
+              "maximum": 1.5
+            },
+            "left": {
+              "type": "number",
+              "minimum": 0.3,
+              "maximum": 1.5
+            },
+            "right": {
+              "type": "number",
+              "minimum": 0.3,
+              "maximum": 1.5
+            }
+          }
+        },
+        "font_family": {
+          "type": "string"
+        },
+        "font_files": {
+          "type": "object",
+          "description": "Optional explicit TTF files. Without it the renderer looks for Arial, then Liberation Sans, then DejaVu Sans.",
+          "required": [
+            "regular",
+            "bold",
+            "italic",
+            "bold_italic"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "regular": {
+              "type": "string"
+            },
+            "bold": {
+              "type": "string"
+            },
+            "italic": {
+              "type": "string"
+            },
+            "bold_italic": {
+              "type": "string"
+            }
+          }
+        },
+        "font_size_body_pt": {
+          "type": "number",
+          "minimum": 9,
+          "maximum": 12
+        },
+        "accent_color": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$"
+        },
+        "section_order": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "summary",
+              "skills",
+              "experience",
+              "projects",
+              "education",
+              "certifications",
+              "languages",
+              "volunteering"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "summary_max_lines": {
+          "type": "integer",
+          "minimum": 2,
+          "maximum": 6
+        },
+        "bullets_most_recent_role": {
+          "$ref": "#/$defs/minMax"
+        },
+        "bullets_older_roles": {
+          "$ref": "#/$defs/minMax"
+        },
+        "max_roles_shown": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 8
+        },
+        "min_quantified_bullets": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "output_formats": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "const": "pdf"
+          },
+          "description": "PDF only: it is the format verified to be exactly one page.",
+          "uniqueItems": true
+        },
+        "file_name_template": {
+          "type": "string"
+        },
+        "local_output_dir": {
+          "type": "string"
+        },
+        "never_overwrite": {
+          "type": "boolean"
+        },
+        "show_learning_line": {
+          "type": "boolean",
+          "description": "Show a 'Learning:' line under Skills for job keywords the candidate is learning."
+        },
+        "max_learning_items": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 6
+        }
+      }
+    },
+    "tracking": {
+      "type": "object",
+      "required": [
+        "storage",
+        "columns",
+        "statuses",
+        "closed_statuses"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "storage": {
+          "enum": [
+            "google_sheets",
+            "chat"
+          ],
+          "description": "google_sheets = the Google Sheet built from templates/google_sheet_structure.json; chat = results shown in the chat in the same table format."
+        },
+        "tab_strategy": {
+          "enum": [
+            "weekly",
+            "monthly",
+            "single"
+          ]
+        },
+        "tab_name_template": {
+          "type": "string"
+        },
+        "columns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "contains": {
+            "const": "Job ID"
+          }
+        },
+        "statuses": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "closed_statuses": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "local_state_file": {
+          "type": "string",
+          "description": "Local job history used for de-duplication and statuses (always kept; the only history in chat mode)."
+        }
+      }
+    },
+    "integrations": {
+      "type": "object",
+      "required": [
+        "firecrawl",
+        "google"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "firecrawl": {
+          "type": "object",
+          "required": [
+            "mode"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "required": {
+              "type": "boolean"
+            },
+            "mode": {
+              "enum": [
+                "mcp",
+                "api"
+              ]
+            },
+            "api_key_env": {
+              "type": "string"
+            },
+            "scrape_formats": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "markdown",
+                  "html",
+                  "json"
+                ]
+              }
+            },
+            "only_main_content": {
+              "type": "boolean"
+            },
+            "max_scrapes_per_run": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "rate_limit_per_minute": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "search_results_per_query": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            },
+            "search_time_filter": {
+              "enum": [
+                "qdr:d",
+                "qdr:w",
+                "qdr:m"
+              ]
+            },
+            "status": {
+              "$ref": "#/$defs/integrationStatus"
+            },
+            "last_checked_at": {
+              "$ref": "#/$defs/nullableDateTime"
+            }
+          }
+        },
+        "apify": {
+          "type": "object",
+          "required": [
+            "mode"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "required": {
+              "type": "boolean"
+            },
+            "mode": {
+              "enum": [
+                "mcp",
+                "api",
+                "disabled"
+              ]
+            },
+            "api_token_env": {
+              "type": "string"
+            },
+            "use_for": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "linkedin",
+                  "scheduled_runs",
+                  "fallback_scraping"
+                ]
+              }
+            },
+            "status": {
+              "$ref": "#/$defs/integrationStatus"
+            },
+            "last_checked_at": {
+              "$ref": "#/$defs/nullableDateTime"
+            },
+            "max_results_per_search": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000
+            },
+            "fallback_to_firecrawl": {
+              "type": "boolean",
+              "description": "If an Apify run fails or the free credit is used up, continue that run with Firecrawl."
+            }
+          }
+        },
+        "google": {
+          "type": "object",
+          "required": [
+            "drive",
+            "sheets",
+            "permissions"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "required": {
+              "type": "boolean"
+            },
+            "drive": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "root_folder_name": {
+                  "type": "string"
+                },
+                "root_folder_id": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "cv_subfolder_name": {
+                  "type": "string"
+                },
+                "cv_subfolder_id": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            },
+            "sheets": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "tracking_spreadsheet_id": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "template_tab_name": {
+                  "type": "string"
+                }
+              }
+            },
+            "gmail": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                }
+              }
+            },
+            "permissions": {
+              "type": "object",
+              "required": [
+                "create_files_in_drive"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "create_files_in_drive": {
+                  "type": "boolean",
+                  "description": "Explicit user consent captured during onboarding. The agent must not create Drive files while false."
+                },
+                "granted_at": {
+                  "$ref": "#/$defs/nullableDateTime"
+                }
+              }
+            },
+            "status": {
+              "$ref": "#/$defs/integrationStatus"
+            },
+            "last_checked_at": {
+              "$ref": "#/$defs/nullableDateTime"
+            }
+          }
+        }
+      }
+    },
+    "notifications": {
+      "type": "object",
+      "required": [
+        "email",
+        "schedule"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "email": {
+          "type": "object",
+          "required": [
+            "enabled"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "provider": {
+              "enum": [
+                "gmail_mcp",
+                "smtp"
+              ]
+            },
+            "recipients": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "format": "email"
+              }
+            },
+            "subject_template": {
+              "type": "string"
+            },
+            "min_fit_to_include": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "link_tailored_cvs": {
+              "type": "boolean"
+            },
+            "send_when_no_matches": {
+              "type": "boolean"
+            },
+            "near_miss_margin": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 30,
+              "description": "Jobs this many points below min_fit_score are listed as near misses in the digest."
+            },
+            "max_rows_in_table": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50
+            },
+            "link_tracking_sheet": {
+              "type": "boolean",
+              "description": "Put a link to the Google Sheet tab in the email."
+            }
+          },
+          "if": {
+            "properties": {
+              "enabled": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "provider",
+              "recipients"
+            ],
+            "properties": {
+              "recipients": {
+                "minItems": 1
+              }
+            }
+          }
+        },
+        "schedule": {
+          "type": "object",
+          "required": [
+            "enabled"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "orchestrator": {
+              "enum": [
+                "claude_scheduled_task",
+                "apify_schedule",
+                "manual"
+              ]
+            },
+            "days": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "MON",
+                  "TUE",
+                  "WED",
+                  "THU",
+                  "FRI",
+                  "SAT",
+                  "SUN"
+                ]
+              },
+              "uniqueItems": true
+            },
+            "time": {
+              "type": "string",
+              "pattern": "^([01][0-9]|2[0-3]):[0-5][0-9]$"
+            },
+            "timezone": {
+              "type": "string"
+            },
+            "catch_up_missed_runs": {
+              "type": "boolean"
+            }
+          },
+          "if": {
+            "properties": {
+              "enabled": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "orchestrator",
+              "days",
+              "time",
+              "timezone"
+            ],
+            "properties": {
+              "days": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    "onboarding": {
+      "type": "object",
+      "required": [
+        "completed"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "completed": {
+          "type": "boolean"
+        },
+        "completed_at": {
+          "$ref": "#/$defs/nullableDateTime"
+        },
+        "last_completed_phase": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 9
+        }
+      }
+    },
+    "profile_quality": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Quality gate the profile must pass before the first search.",
+      "properties": {
+        "min_bullets_per_role": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 8
+        },
+        "min_metric_bullets_per_role": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 8
+        },
+        "min_responsibilities_last_role": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10
+        },
+        "about_me_sentences": {
+          "$ref": "#/$defs/minMax"
+        },
+        "min_core_skills": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 20
+        },
+        "roles_checked": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10,
+          "description": "How many of the most recent roles must pass (usually cv.max_roles_shown)."
+        },
+        "max_followups_per_gap": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 5
+        }
+      }
+    }
+  },
+  "$defs": {
+    "board": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "enabled",
+        "category",
+        "coverage",
+        "countries",
+        "method"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9_]+$"
+        },
+        "name": {
+          "type": "string"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "coverage": {
+          "enum": [
+            "pan_eu",
+            "country",
+            "remote_eu",
+            "remote_global"
+          ],
+          "description": "pan_eu = all of Europe; country = the listed countries only; remote_eu = remote roles open across European time zones (some limited to EU/EEA residents); remote_global = remote roles worldwide."
+        },
+        "countries": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "pattern": "^(\\*|[A-Z]{2})$"
+          },
+          "description": "ISO 3166-1 alpha-2 codes, or [\"*\"] for all."
+        },
+        "method": {
+          "enum": [
+            "firecrawl_search",
+            "firecrawl_web_search",
+            "firecrawl_provider",
+            "firecrawl_scrape_url",
+            "apify_actor",
+            "public_api"
+          ],
+          "description": "firecrawl_search = site search on one board; firecrawl_web_search = open web search across all sites (employer career pages, smaller boards); firecrawl_provider = a Firecrawl structured data provider; others as named."
+        },
+        "domains": {
+          "type": "object",
+          "description": "Map of country code (or *) to the domain/path used in site: queries.",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "query_template": {
+          "type": "string",
+          "description": "Placeholders: {domain} {title} {location} {country}"
+        },
+        "search_url_template": {
+          "type": "string",
+          "description": "Placeholders: {title_urlencoded} {country_lower} {location_urlencoded}"
+        },
+        "apify_actor": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "string"
+        },
+        "category": {
+          "enum": [
+            "aggregator",
+            "public_employment_service",
+            "tech_startup",
+            "remote",
+            "national"
+          ]
+        },
+        "region": {
+          "enum": [
+            "europe",
+            "dach",
+            "uk_ie",
+            "benelux",
+            "nordics",
+            "southern_europe",
+            "cee",
+            "global"
+          ]
+        },
+        "listing_languages": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z]{2}$"
+          },
+          "description": "ISO 639-1 languages most listings are written in. Used to skip boards the candidate can't work in, and to search with translated titles."
+        },
+        "requires_login_for_full_text": {
+          "type": "boolean",
+          "description": "Some listings need an account. The agent never logs in; it uses public pages only and skips the rest."
+        },
+        "provider": {
+          "type": "object",
+          "required": [
+            "provider",
+            "capability",
+            "countries"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "provider": {
+              "type": "string"
+            },
+            "capability": {
+              "type": "string"
+            },
+            "countries": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[A-Z]{2}$"
+              }
+            },
+            "credits_per_call": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "job_url_pattern": {
+          "type": "string",
+          "description": "Regex matching a single job's page. Search hits that don't match are listing pages: scrape them and collect links that do."
+        },
+        "search_time_filter": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "qdr:d",
+            "qdr:w",
+            "qdr:m",
+            null
+          ],
+          "description": "Per-board override. null = this board's pages carry no date the search index can filter on; search without a time filter and check the posting date on the page."
+        },
+        "verified": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Date of the last live test (see docs/board-tests.md)."
+        },
+        "fallback_method": {
+          "enum": [
+            "firecrawl_search"
+          ],
+          "description": "Used when the primary method is unavailable (e.g. Apify not connected or out of credit). Needs domains + query_template."
+        },
+        "apify_actor_input": {
+          "type": "object",
+          "description": "Fixed input for the Apify actor; keywords, location and datePosted are filled per search."
+        },
+        "always_on": {
+          "type": "boolean",
+          "description": "Searched for every target country and never offered for removal in onboarding (LinkedIn and web search)."
+        },
+        "added_by": {
+          "enum": [
+            "catalog",
+            "user"
+          ],
+          "description": "catalog = ships with the agent; user = added by the user for their countries during onboarding."
+        },
+        "exclude_domains": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "For firecrawl_web_search: sites to leave out (salary sites, social media, forums)."
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "method": {
+                "const": "firecrawl_search"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "domains",
+              "query_template"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "method": {
+                "const": "firecrawl_scrape_url"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "search_url_template"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "method": {
+                "const": "apify_actor"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "apify_actor"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "method": {
+                "const": "firecrawl_provider"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "provider"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "fallback_method": {
+                "const": "firecrawl_search"
+              }
+            },
+            "required": [
+              "fallback_method"
+            ]
+          },
+          "then": {
+            "required": [
+              "domains",
+              "query_template"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "method": {
+                "const": "firecrawl_web_search"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "query_template"
+            ]
+          }
+        }
+      ]
+    },
+    "minMax": {
+      "type": "object",
+      "required": [
+        "min",
+        "max"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "min": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 8
+        },
+        "max": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 8
+        }
+      }
+    },
+    "integrationStatus": {
+      "enum": [
+        "unchecked",
+        "ok",
+        "degraded",
+        "missing",
+        "disabled"
+      ]
+    },
+    "nullableDateTime": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

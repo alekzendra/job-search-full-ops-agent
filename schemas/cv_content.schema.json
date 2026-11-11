@@ -1,0 +1,301 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/alekzendra/job-search-full-ops-agent/main/schemas/cv_content.schema.json",
+  "title": "Job Search Full-Ops Agent — tailored CV content",
+  "description": "The text of one tailored CV, written by Claude in SKILL.md Step 7 and rendered by tools/render_cv.py. Layout comes from config.json; this file holds only content.",
+  "type": "object",
+  "required": [
+    "header",
+    "summary",
+    "experience"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "job_id": {
+      "type": "string"
+    },
+    "company": {
+      "type": "string",
+      "description": "Target company (used for the output folder name)."
+    },
+    "header": {
+      "type": "object",
+      "required": [
+        "name",
+        "contact"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "headline": {
+          "type": "string"
+        },
+        "contact": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "text"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "text": {
+                "type": "string"
+              },
+              "url": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "summary": {
+      "type": "string"
+    },
+    "skills": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "tools": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "experience": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "title",
+          "company",
+          "dates",
+          "bullets"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "role_id": {
+            "type": "string",
+            "description": "experience[].id in user_profile.json"
+          },
+          "title": {
+            "type": "string"
+          },
+          "company": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
+          },
+          "dates": {
+            "type": "string"
+          },
+          "tagline": {
+            "type": "string"
+          },
+          "bullets": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "projects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "line"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "line": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "education": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "degree",
+          "institution"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "degree": {
+            "type": "string"
+          },
+          "dates": {
+            "type": "string"
+          },
+          "institution": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "certifications": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "issuer": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "languages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "language",
+          "level"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "language": {
+            "type": "string"
+          },
+          "level": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "volunteering": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "derived_numbers": {
+      "type": "array",
+      "description": "Numbers on the CV that are calculated rather than stated in the profile (e.g. total years of experience). Each needs a basis; the linter lets them through but lists them for review.",
+      "items": {
+        "type": "object",
+        "required": [
+          "value",
+          "basis"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "basis": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "target_keywords": {
+      "type": "array",
+      "description": "ATS keywords from the job post (SKILL.md Step 6). Every matched / matched_synonym keyword must appear in the CV text in the job's exact wording; missing keywords must not appear, because the profile does not support them.",
+      "items": {
+        "type": "object",
+        "required": [
+          "keyword",
+          "status",
+          "priority"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "keyword": {
+            "type": "string",
+            "description": "Exact spelling from the job post, e.g. 'stakeholder management', 'Jira', 'SAFe'."
+          },
+          "status": {
+            "enum": [
+              "matched",
+              "matched_synonym",
+              "learning",
+              "missing"
+            ],
+            "description": "learning = not used professionally, but in the profile's skills.learning; goes only on the Learning line."
+          },
+          "priority": {
+            "enum": [
+              "must",
+              "nice"
+            ],
+            "description": "must = stated as a requirement; nice = 'nice to have' / frequent in the post."
+          },
+          "evidence": {
+            "type": "string",
+            "description": "Text from user_profile.json that supports the keyword (a skill, tool or phrase from an achievement). Required for matched / matched_synonym."
+          },
+          "placed_in": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "headline",
+                "summary",
+                "skills",
+                "tools",
+                "experience",
+                "learning"
+              ]
+            }
+          }
+        },
+        "if": {
+          "properties": {
+            "status": {
+              "enum": [
+                "matched",
+                "matched_synonym",
+                "learning"
+              ]
+            }
+          }
+        },
+        "then": {
+          "required": [
+            "evidence"
+          ]
+        }
+      }
+    },
+    "learning": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Rendered as a 'Learning:' line under Skills. Each item must be in user_profile.json skills.learning."
+    }
+  }
+}

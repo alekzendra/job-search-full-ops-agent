@@ -1,0 +1,202 @@
+{
+  "description": "Structure of the Job Search Full-Ops Agent tracking spreadsheet. Onboarding (Phase 7) builds the 'Template' tab from this file; every run (SKILL.md Step 9) copies that tab for the new period and fills the rows. Column names must match config.json tracking.columns, in the same order.",
+  "spreadsheet_name": "Job Search Full-Ops Tracker",
+  "template_tab": "Template",
+  "tab_name_template": "Week_{iso_week}_{year}",
+  "row_key": "Job ID",
+  "sort": {
+    "column": "Fit Score (%)",
+    "order": "desc"
+  },
+  "frozen_rows": 1,
+  "frozen_columns": 1,
+  "header": {
+    "bold": true,
+    "font_color": "#FFFFFF",
+    "background": "#215E99",
+    "wrap": true,
+    "height_px": 36
+  },
+  "body": {
+    "font_family": "Arial",
+    "font_size_pt": 10,
+    "vertical_align": "top",
+    "alternating_row_background": "#F3F6FA"
+  },
+  "columns": [
+    {
+      "name": "Job Title",
+      "type": "text",
+      "width_px": 220,
+      "owner": "agent",
+      "required": true
+    },
+    {
+      "name": "Company",
+      "type": "text",
+      "width_px": 160,
+      "owner": "agent",
+      "required": true
+    },
+    {
+      "name": "Location / Work Type",
+      "type": "text",
+      "width_px": 170,
+      "owner": "agent",
+      "required": true,
+      "format_hint": "Starts with Remote / Hybrid / Onsite, e.g. 'Hybrid, Berlin (DE)' or 'Remote (EU)'."
+    },
+    {
+      "name": "Fit Score (%)",
+      "type": "number",
+      "width_px": 80,
+      "owner": "agent",
+      "required": true,
+      "number_format": "0",
+      "align": "center",
+      "conditional_formatting": [
+        {
+          "rule": ">=",
+          "value_from": "config.scoring.original_cv_ok_threshold",
+          "background": "#B7E1CD"
+        },
+        {
+          "rule": "between",
+          "from": "config.scoring.min_fit_score",
+          "to_below": "config.scoring.original_cv_ok_threshold",
+          "background": "#E2F3EA"
+        },
+        {
+          "rule": "<",
+          "value_from": "config.scoring.min_fit_score",
+          "background": "#EFEFEF"
+        }
+      ]
+    },
+    {
+      "name": "Posted Date",
+      "type": "date",
+      "width_px": 95,
+      "owner": "agent",
+      "required": false,
+      "number_format": "yyyy-mm-dd"
+    },
+    {
+      "name": "Source",
+      "type": "text",
+      "width_px": 120,
+      "owner": "agent",
+      "required": true,
+      "format_hint": "The board's name from config.json, or 'Manual' for links the user sent."
+    },
+    {
+      "name": "Apply Link",
+      "type": "url",
+      "width_px": 90,
+      "owner": "agent",
+      "required": true,
+      "display_text": "Open",
+      "format_hint": "Canonical job URL without utm_* or other tracking parameters."
+    },
+    {
+      "name": "CV Action",
+      "type": "enum",
+      "width_px": 150,
+      "owner": "agent",
+      "required": true,
+      "values": [
+        "Tailored CV Generated",
+        "Not tailored (see notes)"
+      ],
+      "dropdown": true,
+      "format_hint": "Every job at or above min_fit_score gets its own tailored CV. 'Not tailored' only when the CV could not be produced (e.g. it couldn't be fitted to one page); the reason goes in the notes."
+    },
+    {
+      "name": "Tailored CV Link",
+      "type": "url",
+      "width_px": 90,
+      "owner": "agent",
+      "required": false,
+      "display_text": "PDF",
+      "format_hint": "Drive link to the PDF, or its absolute local path when Drive is not used. PDF only."
+    },
+    {
+      "name": "Application Status",
+      "type": "enum",
+      "width_px": 120,
+      "owner": "user",
+      "required": true,
+      "values_from": "config.tracking.statuses",
+      "default": "New",
+      "dropdown": true,
+      "rule": "The agent writes 'New' on new rows only. It never changes a status the user has set.",
+      "conditional_formatting": [
+        {
+          "rule": "equals",
+          "value": "New",
+          "background": "#FFF2CC"
+        },
+        {
+          "rule": "equals",
+          "value": "Applied",
+          "background": "#CFE2F3"
+        },
+        {
+          "rule": "equals",
+          "value": "Interviewing",
+          "background": "#D9D2E9"
+        },
+        {
+          "rule": "equals",
+          "value": "Offer",
+          "background": "#B7E1CD"
+        },
+        {
+          "rule": "equals",
+          "value": "Rejected",
+          "background": "#F4CCCC"
+        },
+        {
+          "rule": "equals",
+          "value": "Skipped",
+          "background": "#EFEFEF"
+        }
+      ]
+    },
+    {
+      "name": "AI Fit & Tailoring Notes",
+      "type": "text",
+      "width_px": 320,
+      "owner": "agent",
+      "required": true,
+      "wrap": true,
+      "format_hint": "1-3 sentences: why it fits, main gaps, flags (junior level, salary below floor, language), keyword coverage, e.g. 'must 7/7, nice 3/4'."
+    },
+    {
+      "name": "ATS Keywords Matched",
+      "type": "text",
+      "width_px": 220,
+      "owner": "agent",
+      "required": false,
+      "wrap": true,
+      "format_hint": "Comma-separated, in the job post's spelling. Learning-line keywords end with '(learning)'."
+    },
+    {
+      "name": "ATS Keywords Missing",
+      "type": "text",
+      "width_px": 180,
+      "owner": "agent",
+      "required": false,
+      "wrap": true,
+      "format_hint": "Comma-separated keywords the profile doesn't support. They are asked about in the digest."
+    },
+    {
+      "name": "Job ID",
+      "type": "text",
+      "width_px": 140,
+      "owner": "agent",
+      "required": true,
+      "format_hint": "<board id>-<board's job id>, or a hash of the canonical URL. Used to de-duplicate across runs."
+    }
+  ]
+}

@@ -1,0 +1,481 @@
+{
+  "$schema": "./schemas/user_profile.schema.json",
+  "schema_version": 1,
+  "updated_at": "2026-11-07",
+  "personal": {
+    "full_name": "Alex Example",
+    "headline": "Senior Product Manager | B2B SaaS | Data-driven discovery",
+    "email": "alex.example@example.com",
+    "phone": "+49 000 000 0000",
+    "location": {
+      "city": "Berlin",
+      "country": "DE"
+    },
+    "links": {
+      "linkedin": "https://www.linkedin.com/in/alex-example/",
+      "github": null,
+      "portfolio": "https://alex-example.dev"
+    },
+    "work_authorization": [
+      {
+        "region": "EU",
+        "status": "citizen"
+      },
+      {
+        "region": "GB",
+        "status": "requires_sponsorship"
+      }
+    ],
+    "languages": [
+      {
+        "language": "English",
+        "level": "C2"
+      },
+      {
+        "language": "German",
+        "level": "B2"
+      },
+      {
+        "language": "Spanish",
+        "level": "native"
+      }
+    ],
+    "open_to_relocation": true
+  },
+  "master_summary": "Product Manager with 6 years in B2B SaaS, most recently owning billing and pricing for an analytics platform used by 4,000+ companies. I combine quantitative discovery (funnel analysis, SQL, A/B tests) with close partnership with engineering, design and finance. My strongest results are in monetization: usage-based pricing, checkout conversion and billing reliability. Before SaaS analytics I built mobile and dispatcher products for a logistics scale-up, including an ML-based ETA feature. I work best in cross-functional teams that ship in small, measurable steps, and I'm looking for senior product roles in fintech or B2B SaaS.",
+  "experience": [
+    {
+      "id": "acme_pm",
+      "title": "Senior Product Manager",
+      "company": "Acme Analytics",
+      "company_context": {
+        "industry": "B2B SaaS / Analytics",
+        "size": "200-500",
+        "stage": "Series C",
+        "description": "Self-serve product analytics platform for mid-market companies.",
+        "type": "scale_up"
+      },
+      "location": {
+        "city": "Berlin",
+        "country": "DE"
+      },
+      "work_mode": "hybrid",
+      "employment_type": "full_time",
+      "start": "2023-03",
+      "end": null,
+      "scope": {
+        "team_size": 9,
+        "direct_reports": 0,
+        "stakeholders": [
+          "Engineering",
+          "Design",
+          "Sales",
+          "Customer Success",
+          "Finance"
+        ],
+        "budget_owned": null
+      },
+      "responsibilities": [
+        "Own the roadmap for the billing and pricing area (3 squads, 9 engineers, 2 designers).",
+        "Run quarterly discovery: 15-20 customer interviews per quarter plus funnel analysis in Amplitude and SQL.",
+        "Partner with Finance on pricing experiments and revenue forecasting."
+      ],
+      "achievements": [
+        {
+          "id": "acme_usage_pricing",
+          "statement": "Led the migration from seat-based to usage-based pricing for 4,000+ accounts.",
+          "metrics": [
+            {
+              "value": 18,
+              "unit": "%",
+              "direction": "increase",
+              "what": "net revenue retention",
+              "timeframe": "12 months"
+            }
+          ],
+          "context": "Cross-functional with Finance and Sales; phased rollout over 3 cohorts with a rollback plan.",
+          "keywords": [
+            "pricing",
+            "monetization",
+            "usage-based billing",
+            "experimentation",
+            "stakeholder management"
+          ],
+          "cv_bullet": "Led migration of 4,000+ accounts from seat- to usage-based pricing, lifting net revenue retention by 18% in 12 months.",
+          "source": "user_stated",
+          "allowed_in_cv": true
+        },
+        {
+          "id": "acme_checkout",
+          "statement": "Redesigned self-serve checkout after funnel analysis showed a drop at the plan-selection step.",
+          "metrics": [
+            {
+              "value": 27,
+              "unit": "%",
+              "direction": "increase",
+              "what": "trial-to-paid conversion",
+              "timeframe": "one quarter"
+            }
+          ],
+          "context": "A/B tested 3 variants with 2 squads.",
+          "keywords": [
+            "A/B testing",
+            "conversion optimization",
+            "funnel analysis",
+            "Amplitude"
+          ],
+          "cv_bullet": "Redesigned self-serve checkout using funnel analysis and A/B tests, raising trial-to-paid conversion by 27% in one quarter.",
+          "source": "user_stated",
+          "allowed_in_cv": true
+        },
+        {
+          "id": "acme_disputes",
+          "statement": "Owned the billing platform re-architecture onto Stripe Billing and an internal metering service.",
+          "metrics": [
+            {
+              "value": 70,
+              "unit": "%",
+              "direction": "decrease",
+              "what": "invoice disputes per month",
+              "baseline": 120,
+              "timeframe": "7 months"
+            }
+          ],
+          "context": "Disputes went from ~120 to ~35 per month.",
+          "keywords": [
+            "billing",
+            "Stripe",
+            "platform migration"
+          ],
+          "cv_bullet": "Cut invoice disputes from ~120 to ~35 per month by leading the billing re-architecture onto Stripe Billing and an internal metering service.",
+          "source": "user_stated",
+          "allowed_in_cv": true
+        }
+      ],
+      "projects": [
+        {
+          "name": "Billing platform re-architecture",
+          "role": "Product owner",
+          "description": "Replaced an in-house billing engine with Stripe Billing plus an internal metering service.",
+          "tech_stack": [
+            "Stripe Billing",
+            "Kafka",
+            "PostgreSQL"
+          ],
+          "outcome": "Invoice disputes dropped from ~120 to ~35 per month.",
+          "duration_months": 7
+        }
+      ],
+      "tools": [
+        "Jira",
+        "Confluence",
+        "Amplitude",
+        "SQL",
+        "Figma",
+        "Stripe"
+      ],
+      "methodologies": [
+        "Scrum",
+        "Continuous discovery",
+        "OKRs"
+      ],
+      "domains": [
+        "SaaS",
+        "Billing",
+        "Analytics"
+      ],
+      "deep_context": "Free-form notes from the onboarding interview: how decisions were made, trade-offs, the hardest problem, what I would do differently. Not printed on the CV; used to understand the candidate and select facts.",
+      "never_claim": [
+        "people management",
+        "P&L ownership"
+      ]
+    },
+    {
+      "id": "beta_apm",
+      "title": "Product Manager",
+      "company": "Beta Logistics",
+      "company_context": {
+        "industry": "Logistics tech",
+        "size": "50-200",
+        "stage": "Series A",
+        "description": "Route optimisation SaaS for regional carriers.",
+        "type": "startup"
+      },
+      "location": {
+        "city": "Madrid",
+        "country": "ES"
+      },
+      "work_mode": "onsite",
+      "employment_type": "full_time",
+      "start": "2020-01",
+      "end": "2023-02",
+      "scope": {
+        "team_size": 6,
+        "direct_reports": 0,
+        "stakeholders": [
+          "Engineering",
+          "Operations",
+          "Key accounts"
+        ],
+        "budget_owned": null
+      },
+      "responsibilities": [
+        "Owned the driver mobile app and the dispatcher web console.",
+        "Translated carrier operations pain points into a quarterly roadmap.",
+        "Ran fortnightly roadmap reviews with operations leads and key accounts."
+      ],
+      "achievements": [
+        {
+          "id": "beta_route_eta",
+          "statement": "Shipped ETA prediction to dispatchers.",
+          "metrics": [
+            {
+              "value": 22,
+              "unit": "%",
+              "direction": "decrease",
+              "what": "late deliveries",
+              "timeframe": "6 months"
+            }
+          ],
+          "context": "Worked with 2 data scientists; rolled out to 40 carriers.",
+          "keywords": [
+            "machine learning product",
+            "mobile",
+            "B2B",
+            "operations"
+          ],
+          "cv_bullet": "Shipped ML-based ETA prediction to 40 carriers, cutting late deliveries by 22% within 6 months.",
+          "source": "user_stated",
+          "allowed_in_cv": true
+        },
+        {
+          "id": "beta_dispatcher",
+          "statement": "Rebuilt the dispatcher web console around the 5 most frequent dispatcher tasks.",
+          "metrics": [
+            {
+              "value": 35,
+              "unit": "%",
+              "direction": "decrease",
+              "what": "time to assign a route",
+              "timeframe": "one quarter"
+            }
+          ],
+          "context": "Based on 12 dispatcher shadowing sessions.",
+          "keywords": [
+            "UX research",
+            "B2B",
+            "operations"
+          ],
+          "cv_bullet": "Reduced route-assignment time by 35% in one quarter by redesigning the dispatcher console around 12 shadowing sessions.",
+          "source": "user_stated",
+          "allowed_in_cv": true
+        },
+        {
+          "id": "beta_onboarding",
+          "statement": "Introduced a self-serve carrier onboarding flow.",
+          "metrics": [
+            {
+              "value": 3,
+              "unit": "days",
+              "direction": "absolute",
+              "what": "carrier onboarding time (from 10 days)",
+              "baseline": 10
+            }
+          ],
+          "context": "Replaced manual onboarding calls.",
+          "keywords": [
+            "onboarding",
+            "self-serve",
+            "activation"
+          ],
+          "cv_bullet": "Shortened carrier onboarding from 10 to 3 days by launching a self-serve onboarding flow that replaced manual calls.",
+          "source": "user_stated",
+          "allowed_in_cv": true
+        }
+      ],
+      "projects": [],
+      "tools": [
+        "Jira",
+        "Mixpanel",
+        "Figma"
+      ],
+      "methodologies": [
+        "Kanban"
+      ],
+      "domains": [
+        "Logistics",
+        "Mobile"
+      ],
+      "deep_context": "",
+      "never_claim": []
+    }
+  ],
+  "education": [
+    {
+      "degree": "MSc",
+      "field": "Business Informatics",
+      "institution": "Example University",
+      "country": "ES",
+      "start": "2017",
+      "end": "2019",
+      "notes": null
+    }
+  ],
+  "certifications": [
+    {
+      "name": "Professional Scrum Product Owner I (PSPO I)",
+      "issuer": "Scrum.org",
+      "year": 2021,
+      "show_on_cv": true
+    }
+  ],
+  "skills": {
+    "core": [
+      "Product discovery",
+      "Roadmapping",
+      "Pricing & monetization",
+      "A/B testing",
+      "Stakeholder management"
+    ],
+    "tools": [
+      "Jira",
+      "Confluence",
+      "Amplitude",
+      "Mixpanel",
+      "SQL",
+      "Figma",
+      "Stripe"
+    ],
+    "methodologies": [
+      "Scrum",
+      "Kanban",
+      "OKRs",
+      "Jobs-to-be-Done"
+    ],
+    "technical": [
+      "SQL",
+      "REST APIs (reading specs)"
+    ],
+    "learning": [
+      {
+        "name": "Looker",
+        "status": "in_progress",
+        "detail": "Google Cloud Skills Boost course, started 2026-10",
+        "confirmed_at": "2026-11-07"
+      }
+    ]
+  },
+  "additional": {
+    "volunteering": [],
+    "awards": [],
+    "publications": []
+  },
+  "guardrails": {
+    "never_claim": [
+      "P&L ownership",
+      "line management of more than 0 people"
+    ],
+    "excluded_terms": [],
+    "sensitive_facts_do_not_disclose": []
+  },
+  "preferences": {
+    "target_titles": [
+      "Senior Product Manager",
+      "Product Manager",
+      "Group Product Manager"
+    ],
+    "adjacent_titles": [
+      "Product Owner",
+      "Technical Product Manager"
+    ],
+    "seniority": [
+      "mid",
+      "senior"
+    ],
+    "industries_include": [
+      "SaaS",
+      "Fintech",
+      "Logistics tech"
+    ],
+    "industries_exclude": [
+      "Gambling",
+      "Defense"
+    ],
+    "locations": [
+      {
+        "country": "DE",
+        "cities": [
+          "Berlin"
+        ],
+        "work_modes": [
+          "remote",
+          "hybrid",
+          "onsite"
+        ]
+      },
+      {
+        "country": "NL",
+        "cities": [
+          "Amsterdam"
+        ],
+        "work_modes": [
+          "hybrid"
+        ]
+      },
+      {
+        "country": "*",
+        "cities": [],
+        "work_modes": [
+          "remote"
+        ]
+      }
+    ],
+    "remote_scope": {
+      "eu_wide_remote": true,
+      "accept_country_locked_remote_in": [
+        "DE",
+        "ES"
+      ],
+      "max_timezone_offset_hours_from_home": 2
+    },
+    "work_languages": [
+      "English",
+      "German",
+      "Spanish"
+    ],
+    "salary": {
+      "minimum": 75000,
+      "currency": "EUR",
+      "period": "year",
+      "drop_below_minimum": false
+    },
+    "contract_types": [
+      "permanent",
+      "b2b_contract"
+    ],
+    "company_size": [
+      "50-200",
+      "200-500",
+      "500-1000",
+      "1000+"
+    ],
+    "needs_visa_sponsorship": false,
+    "max_years_required": 8,
+    "deal_breakers": [
+      "Mandatory 5 days onsite",
+      "Commission-only pay"
+    ]
+  },
+  "cv_preferences": {
+    "certifications_order": [
+      "Professional Scrum Product Owner I (PSPO I)"
+    ],
+    "show_languages_section": true,
+    "show_photo": false,
+    "tone": "concise, metric-led, first-person implied (no 'I')"
+  },
+  "quality_gate": {
+    "passed_at": "2026-11-08",
+    "accepted_gaps": []
+  }
+}

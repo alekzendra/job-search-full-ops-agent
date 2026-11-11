@@ -1,0 +1,867 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/alekzendra/job-search-full-ops-agent/main/schemas/user_profile.schema.json",
+  "title": "Job Search Full-Ops Agent — candidate profile",
+  "description": "The candidate's deep fact base and job preferences. Every fact the agent prints on a CV must trace back to this file. Personal data: keep user_profile.json out of git.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "personal",
+    "experience",
+    "skills",
+    "preferences"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schema_version": {
+      "const": 1
+    },
+    "updated_at": {
+      "type": "string"
+    },
+    "personal": {
+      "type": "object",
+      "required": [
+        "full_name",
+        "email",
+        "location",
+        "languages"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "full_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "headline": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string",
+          "format": "email"
+        },
+        "phone": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "location": {
+          "$ref": "#/$defs/place"
+        },
+        "links": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "linkedin": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "github": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "portfolio": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        },
+        "work_authorization": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "region",
+              "status"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "region": {
+                "type": "string",
+                "description": "EU, or ISO country code (GB, CH, NO…)"
+              },
+              "status": {
+                "enum": [
+                  "citizen",
+                  "permanent_resident",
+                  "work_permit",
+                  "blue_card",
+                  "requires_sponsorship"
+                ]
+              }
+            }
+          }
+        },
+        "languages": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "language",
+              "level"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "language": {
+                "type": "string"
+              },
+              "level": {
+                "enum": [
+                  "A1",
+                  "A2",
+                  "B1",
+                  "B2",
+                  "C1",
+                  "C2",
+                  "native"
+                ]
+              }
+            }
+          }
+        },
+        "open_to_relocation": {
+          "type": "boolean"
+        }
+      }
+    },
+    "master_summary": {
+      "type": "string",
+      "description": "'About me': 5-6 sentences in the candidate's own words, rich enough to re-angle for different job posts. Tone reference for tailored summaries."
+    },
+    "experience": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/role"
+      }
+    },
+    "education": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "degree",
+          "institution"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "degree": {
+            "type": "string"
+          },
+          "field": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "institution": {
+            "type": "string"
+          },
+          "country": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "start": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "end": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "notes": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "certifications": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "issuer": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "year": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "show_on_cv": {
+            "type": "boolean",
+            "default": true
+          }
+        }
+      }
+    },
+    "skills": {
+      "type": "object",
+      "required": [
+        "core"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "core": {
+          "$ref": "#/$defs/stringList"
+        },
+        "tools": {
+          "$ref": "#/$defs/stringList"
+        },
+        "methodologies": {
+          "$ref": "#/$defs/stringList"
+        },
+        "technical": {
+          "$ref": "#/$defs/stringList"
+        },
+        "learning": {
+          "type": "array",
+          "description": "Skills the candidate is actively learning but has not used professionally. Only these may appear on the CV's 'Learning:' line, and never as experience.",
+          "items": {
+            "type": "object",
+            "required": [
+              "name",
+              "status"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "status": {
+                "enum": [
+                  "in_progress",
+                  "completed_course",
+                  "planned"
+                ]
+              },
+              "detail": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Course / project / since when. Not printed; used to answer recruiters honestly."
+              },
+              "confirmed_at": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Date the user confirmed this (onboarding or a digest answer)."
+              }
+            }
+          }
+        }
+      }
+    },
+    "additional": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "volunteering": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "awards": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "publications": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "guardrails": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Hard limits the CV writer must respect.",
+      "properties": {
+        "never_claim": {
+          "$ref": "#/$defs/stringList"
+        },
+        "excluded_terms": {
+          "$ref": "#/$defs/stringList"
+        },
+        "sensitive_facts_do_not_disclose": {
+          "$ref": "#/$defs/stringList"
+        }
+      }
+    },
+    "preferences": {
+      "type": "object",
+      "required": [
+        "target_titles",
+        "locations"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "target_titles": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "adjacent_titles": {
+          "$ref": "#/$defs/stringList"
+        },
+        "seniority": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "intern",
+              "junior",
+              "mid",
+              "senior",
+              "lead",
+              "principal",
+              "head",
+              "director"
+            ]
+          }
+        },
+        "industries_include": {
+          "$ref": "#/$defs/stringList"
+        },
+        "industries_exclude": {
+          "$ref": "#/$defs/stringList"
+        },
+        "locations": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "country",
+              "work_modes"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "country": {
+                "type": "string",
+                "pattern": "^(\\*|[A-Z]{2})$"
+              },
+              "cities": {
+                "$ref": "#/$defs/stringList"
+              },
+              "work_modes": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "enum": [
+                    "remote",
+                    "hybrid",
+                    "onsite"
+                  ]
+                },
+                "uniqueItems": true
+              }
+            }
+          }
+        },
+        "remote_scope": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "eu_wide_remote": {
+              "type": "boolean"
+            },
+            "accept_country_locked_remote_in": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[A-Z]{2}$"
+              }
+            },
+            "max_timezone_offset_hours_from_home": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 0,
+              "maximum": 12
+            }
+          }
+        },
+        "work_languages": {
+          "$ref": "#/$defs/stringList"
+        },
+        "salary": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "minimum": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "minimum": 0
+            },
+            "currency": {
+              "type": "string",
+              "pattern": "^[A-Z]{3}$"
+            },
+            "period": {
+              "enum": [
+                "year",
+                "month",
+                "day",
+                "hour"
+              ]
+            },
+            "drop_below_minimum": {
+              "type": "boolean"
+            }
+          }
+        },
+        "contract_types": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "permanent",
+              "fixed_term",
+              "b2b_contract",
+              "freelance",
+              "part_time",
+              "internship"
+            ]
+          }
+        },
+        "company_size": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "1-50",
+              "50-200",
+              "200-500",
+              "500-1000",
+              "1000+"
+            ]
+          }
+        },
+        "needs_visa_sponsorship": {
+          "type": "boolean"
+        },
+        "max_years_required": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 30
+        },
+        "deal_breakers": {
+          "$ref": "#/$defs/stringList"
+        }
+      }
+    },
+    "cv_preferences": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "certifications_order": {
+          "$ref": "#/$defs/stringList"
+        },
+        "show_languages_section": {
+          "type": "boolean"
+        },
+        "show_photo": {
+          "type": "boolean",
+          "default": false
+        },
+        "tone": {
+          "type": "string"
+        }
+      }
+    },
+    "quality_gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Result of the profile quality gate (tools/profile_check.py).",
+      "properties": {
+        "passed_at": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "accepted_gaps": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Check ids the user could not fill after the follow-up questions; listed in the onboarding summary."
+        }
+      }
+    }
+  },
+  "$defs": {
+    "stringList": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "yearMonth": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])$"
+    },
+    "place": {
+      "type": "object",
+      "required": [
+        "country"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "city": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "country": {
+          "type": "string",
+          "pattern": "^[A-Z]{2}$"
+        }
+      }
+    },
+    "role": {
+      "type": "object",
+      "required": [
+        "id",
+        "title",
+        "company",
+        "start",
+        "end",
+        "responsibilities",
+        "achievements"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9_]+$"
+        },
+        "title": {
+          "type": "string"
+        },
+        "company": {
+          "type": "string"
+        },
+        "company_context": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "industry": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "size": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "stage": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "description": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "type": {
+              "enum": [
+                "agency",
+                "corporate",
+                "startup",
+                "scale_up",
+                "sme",
+                "public_sector",
+                "ngo",
+                "consultancy",
+                "freelance",
+                "other"
+              ],
+              "description": "What kind of organisation it was."
+            }
+          }
+        },
+        "location": {
+          "$ref": "#/$defs/place"
+        },
+        "work_mode": {
+          "enum": [
+            "remote",
+            "hybrid",
+            "onsite"
+          ]
+        },
+        "employment_type": {
+          "enum": [
+            "full_time",
+            "part_time",
+            "contract",
+            "freelance",
+            "internship",
+            "volunteer"
+          ]
+        },
+        "start": {
+          "$ref": "#/$defs/yearMonth"
+        },
+        "end": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/yearMonth"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "null = current role"
+        },
+        "scope": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "team_size": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 0
+            },
+            "direct_reports": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 0
+            },
+            "stakeholders": {
+              "$ref": "#/$defs/stringList"
+            },
+            "budget_owned": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Only if the candidate truly owned a budget. null means the agent must never claim budget ownership."
+            }
+          }
+        },
+        "responsibilities": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "achievements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/achievement"
+          }
+        },
+        "projects": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "name",
+              "description"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "role": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "description": {
+                "type": "string"
+              },
+              "tech_stack": {
+                "$ref": "#/$defs/stringList"
+              },
+              "outcome": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "duration_months": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "minimum": 0
+              }
+            }
+          }
+        },
+        "tools": {
+          "$ref": "#/$defs/stringList"
+        },
+        "methodologies": {
+          "$ref": "#/$defs/stringList"
+        },
+        "domains": {
+          "$ref": "#/$defs/stringList"
+        },
+        "deep_context": {
+          "type": "string",
+          "description": "Interview notes for understanding; never printed verbatim."
+        },
+        "never_claim": {
+          "$ref": "#/$defs/stringList"
+        }
+      }
+    },
+    "achievement": {
+      "type": "object",
+      "required": [
+        "id",
+        "statement",
+        "source",
+        "allowed_in_cv"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9_]+$"
+        },
+        "statement": {
+          "type": "string",
+          "description": "What happened, in the candidate's terms."
+        },
+        "metrics": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "value",
+              "unit",
+              "what"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "value": {
+                "type": "number"
+              },
+              "unit": {
+                "type": "string",
+                "description": "%, EUR, users, days, hours…"
+              },
+              "direction": {
+                "enum": [
+                  "increase",
+                  "decrease",
+                  "share",
+                  "absolute"
+                ],
+                "description": "increase / decrease = a change; share = a portion (e.g. '18% of orders'); absolute = a plain amount."
+              },
+              "baseline": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "what": {
+                "type": "string"
+              },
+              "timeframe": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        },
+        "context": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "keywords": {
+          "$ref": "#/$defs/stringList"
+        },
+        "cv_bullet": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Approved bullet in XYZ style: 'Accomplished [X] as measured by [Y], by doing [Z]' (action + real result + number)."
+        },
+        "source": {
+          "enum": [
+            "user_stated",
+            "imported_cv",
+            "imported_linkedin",
+            "user_confirmed_rewrite"
+          ],
+          "description": "Provenance. Facts with any other origin may not be used."
+        },
+        "allowed_in_cv": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,1149 @@
+{
+  "$schema": "./schemas/config.schema.json",
+  "schema_version": 1,
+  "locale": {
+    "timezone": "Europe/Berlin",
+    "ui_language": "en",
+    "date_format": "YYYY-MM-DD"
+  },
+  "profile_quality": {
+    "min_bullets_per_role": 3,
+    "min_metric_bullets_per_role": 1,
+    "min_responsibilities_last_role": 3,
+    "about_me_sentences": {
+      "min": 5,
+      "max": 6
+    },
+    "min_core_skills": 5,
+    "roles_checked": 4,
+    "max_followups_per_gap": 2
+  },
+  "search": {
+    "first_run_lookback_days": 14,
+    "max_lookback_days": 21,
+    "max_jobs_per_run": 60,
+    "deduplicate_across_runs": true,
+    "drop_if_jd_language_not_in_profile": true,
+    "boards": [
+      {
+        "id": "linkedin",
+        "name": "LinkedIn Jobs",
+        "enabled": true,
+        "category": "aggregator",
+        "region": "europe",
+        "coverage": "pan_eu",
+        "countries": [
+          "*"
+        ],
+        "method": "apify_actor",
+        "domains": {
+          "*": "linkedin.com/jobs/view"
+        },
+        "listing_languages": [
+          "en"
+        ],
+        "query_template": "site:{domain} \"{title}\" \"{location}\"",
+        "apify_actor": "curious_coder/linkedin-jobs-scraper",
+        "notes": "Primary: Apify actor (structured jobs, date/location filters, about $0.002 per job). Fallback: Firecrawl site search with 'City, Country' as {location} (a bare 'Berlin' also matches Berlin, NJ). Public job pages only; never log in.",
+        "job_url_pattern": "linkedin\\.com/jobs/view/",
+        "verified": "2026-11-07",
+        "fallback_method": "firecrawl_search",
+        "apify_actor_input": {
+          "scrapeCompany": false,
+          "limitPerSource": 50
+        },
+        "added_by": "catalog",
+        "always_on": true
+      },
+      {
+        "id": "web_search",
+        "name": "Web search (all sites: employer career pages, smaller boards)",
+        "enabled": true,
+        "always_on": true,
+        "added_by": "catalog",
+        "category": "aggregator",
+        "region": "europe",
+        "coverage": "pan_eu",
+        "countries": [
+          "*"
+        ],
+        "method": "firecrawl_web_search",
+        "listing_languages": [
+          "en"
+        ],
+        "query_template": "\"{title}\" \"{location}\" job",
+        "exclude_domains": [
+          "facebook.com",
+          "instagram.com",
+          "x.com",
+          "twitter.com",
+          "reddit.com",
+          "quora.com",
+          "youtube.com",
+          "levels.fyi",
+          "payscale.com",
+          "salary.com",
+          "salaryexpert.com",
+          "glassdoor.com",
+          "indeed.com",
+          "linkedin.com"
+        ],
+        "notes": "Open web search, like a Google search, run through Firecrawl's search. Finds employer career pages and boards not in the catalog (live test: Takeda, Nestle and consulting-firm career pages for 'Project Manager' in Lisbon). No fixed job_url_pattern: each hit's page is checked for a single job ad. Boards already searched directly and noise sites are excluded.",
+        "verified": "2026-11-08"
+      },
+      {
+        "id": "indeed",
+        "name": "Indeed (country sites)",
+        "enabled": true,
+        "category": "aggregator",
+        "region": "europe",
+        "coverage": "country",
+        "countries": [
+          "AT",
+          "BE",
+          "CH",
+          "CZ",
+          "DE",
+          "DK",
+          "ES",
+          "FI",
+          "FR",
+          "GB",
+          "GR",
+          "HU",
+          "IE",
+          "IT",
+          "LU",
+          "NL",
+          "NO",
+          "PL",
+          "PT",
+          "RO",
+          "SE"
+        ],
+        "method": "firecrawl_provider",
+        "domains": {
+          "AT": "at.indeed.com",
+          "BE": "be.indeed.com",
+          "CH": "ch.indeed.com",
+          "CZ": "cz.indeed.com",
+          "DE": "de.indeed.com",
+          "DK": "dk.indeed.com",
+          "ES": "es.indeed.com",
+          "FI": "fi.indeed.com",
+          "FR": "fr.indeed.com",
+          "GB": "uk.indeed.com",
+          "GR": "gr.indeed.com",
+          "HU": "hu.indeed.com",
+          "IE": "ie.indeed.com",
+          "IT": "it.indeed.com",
+          "LU": "lu.indeed.com",
+          "NL": "nl.indeed.com",
+          "NO": "no.indeed.com",
+          "PL": "pl.indeed.com",
+          "PT": "pt.indeed.com",
+          "RO": "ro.indeed.com",
+          "SE": "se.indeed.com"
+        },
+        "listing_languages": [
+          "en"
+        ],
+        "query_template": "site:{domain} \"{title}\" {location}",
+        "notes": "Structured provider (5 credits/call) for its 11 supported countries: dated job records with language and remote/hybrid tags. Other countries fall back to site search, which mostly returns search-results pages.",
+        "job_url_pattern": "/viewjob\\?jk=|/rc/clk\\?jk=",
+        "verified": "2026-11-07",
+        "provider": {
+          "provider": "indeed-com",
+          "capability": "jobs/search",
+          "countries": [
+            "AT",
+            "BE",
+            "CH",
+            "DE",
+            "ES",
+            "FR",
+            "GB",
+            "IE",
+            "IT",
+            "NL",
+            "SE"
+          ],
+          "credits_per_call": 5
+        },
+        "added_by": "catalog"
+      },
+      {
+        "id": "glassdoor",
+        "name": "Glassdoor",
+        "enabled": true,
+        "category": "aggregator",
+        "region": "europe",
+        "coverage": "country",
+        "countries": [
+          "AT",
+          "CH",
+          "DE",
+          "ES",
+          "FR",
+          "GB",
+          "IE",
+          "IT",
+          "NL"
+        ],
+        "method": "firecrawl_search",
+        "domains": {
+          "AT": "glassdoor.at",
+          "CH": "glassdoor.ch",
+          "DE": "glassdoor.de",
+          "ES": "glassdoor.es",
+          "FR": "glassdoor.fr",
+          "GB": "glassdoor.co.uk",
+          "IE": "glassdoor.ie",
+          "IT": "glassdoor.it",
+          "NL": "glassdoor.nl"
+        },
+        "listing_languages": [
+          "en"
+        ],
+        "query_template": "site:{domain} \"{title}\" {location} job",
+        "notes": "Live test: search returns a mix of job and search pages; job pages scraped in full on a basic proxy. The Firecrawl Glassdoor provider is US-only, so it is not used.",
+        "job_url_pattern": "/job-listing/",
+        "verified": "2026-11-07",
+        "added_by": "catalog"
+      },
+      {
+        "id": "eures",
+        "name": "EURES (European Commission job mobility portal)",
+        "enabled": false,
+        "category": "public_employment_service",
+        "region": "europe",
+        "coverage": "pan_eu",
+        "countries": [
+          "AT",
+          "BE",
+          "BG",
+          "HR",
+          "CY",
+          "CZ",
+          "DK",
+          "EE",
+          "FI",
+          "FR",
+          "DE",
+          "GR",
+          "HU",
+          "IE",
+          "IT",
+          "LV",
+          "LT",
+          "LU",
+          "MT",
+          "NL",
+          "PL",
+          "PT",
+          "RO",
+          "SK",
+          "SI",
+          "ES",
+          "SE",
+          "IS",
+          "LI",
+          "NO",
+          "CH"
+        ],
+        "method": "firecrawl_scrape_url",
+        "domains": {
+          "*": "eures.europa.eu"
+        },
+        "listing_languages": [
+          "en"
+        ],
+        "search_url_template": "https://eures.europa.eu/eures-apps/searchengine/page/main?lang=en#/search?keywordsEverywhere={title_urlencoded}&locationCodes={country_lower}",
+        "notes": "Disabled: EURES vacancies are rendered by a JavaScript app, are not in search indexes, and the hash-route search URL returns 404 to scrapers. Many EURES ads come from national public employment services (e.g. Platsbanken), which are covered directly.",
+        "verified": "2026-11-07",
+        "added_by": "catalog"
+      },
+      {
+        "id": "eurojobs",
+        "name": "Eurojobs",
+        "enabled": true,
+        "category": "aggregator",
+        "region": "europe",
+        "coverage": "pan_eu",
+        "countries": [
+          "*"
+        ],
+        "method": "firecrawl_search",
+        "domains": {
+          "*": "eurojobs.com"
+        },
+        "listing_languages": [
+          "en"
+        ],
+        "query_template": "site:{domain} \"{title}\" {location}",
+        "job_url_pattern": "/jobs/\\d+/",
+        "verified": "2026-11-07",
+        "added_by": "catalog"
+      },
+      {
+        "id": "wellfound",
+        "name": "Wellfound (startups)",
+        "enabled": true,
+        "category": "tech_startup",
+        "region": "global",
+        "coverage": "remote_global",
+        "countries": [
+          "*"
+        ],
+        "method": "firecrawl_search",
+        "domains": {
+          "*": "wellfound.com/jobs"
+        },
+        "listing_languages": [
+          "en"
+        ],
+        "query_template": "site:{domain} \"{title}\" (remote OR {location})",
+        "job_url_pattern": "/jobs/\\d+-",
+        "verified": "2026-11-07",
+        "added_by": "catalog"
+      },
+      {
+        "id": "welcome_to_the_jungle",
+        "name": "Welcome to the Jungle (incl. former Otta)",
+        "enabled": true,
+        "category": "tech_startup",
+        "region": "europe",
+        "coverage": "country",
+        "countries": [
+          "FR",
+          "ES",
+          "CZ",
+          "SK",
+          "GB",
+          "DE",
+          "BE"
+        ],
+        "method": "firecrawl_search",
+        "domains": {
+          "*": "welcometothejungle.com"
+        },
+        "listing_languages": [
+          "en",
+          "fr",
+          "es",
+          "cs"
+        ],
+        "query_template": "site:{domain} jobs \"{title}\" {location}",
+        "notes": "Otta merged into Welcome to the Jungle in 2024; otta.com links redirect here.",
+        "job_url_pattern": "/companies/[^/]+/jobs/",
+        "verified": "2026-11-07",
+        "added_by": "catalog"
+      },
+      {
+        "id": "nofluffjobs",
+        "name": "No Fluff Jobs",
+        "enabled": true,
+        "category": "tech_startup",
+        "region": "cee",
+        "coverage": "country",
+        "countries": [
+          "PL",
+          "CZ",
+          "SK",
+          "HU"
+        ],
+        "method": "firecrawl_search",
+        "domains": {
+          "*": "nofluffjobs.com"
+        },
+        "listing_languages": [
+          "en",
+          "pl"
+        ],
+        "query_template": "site:{domain} \"{title}\" {location}",
+        "notes": "Salary ranges are always published. Public JSON API also available (method public_api).",
+        "job_url_pattern": "/job/",
+        "verified": "2026-11-07",
+        "added_by": "catalog"
+      },
+      {
+        "id": "landing_jobs",
+        "name": "Landing.Jobs",
+        "enabled": true,
+        "category": "tech_startup",
+        "region": "southern_europe",
+        "coverage": "country",
+        "countries": [
+          "PT",
+          "ES",
+          "DE",
+          "NL"
+        ],
+        "method": "firecrawl_search",
+        "domains": {
+          "*": "landing.jobs/at"
+        },
+        "listing_languages": [
+          "en"
+        ],
+        "query_template": "site:{domain} \"{title}\"",
+        "notes": "No time filter: with 'qdr:m' the search returns 0 results (re-tested 2026-11-08). Low precision: title phrases often match only 'similar jobs' blocks, so scoring filters them out. Company pages (/at/<company>) are not jobs; job_url_pattern skips them.",
+        "job_url_pattern": "landing\\.jobs/at/[^/]+/[^/?#]+",
+        "verified": "2026-11-08",
+        "search_time_filter": null,
+        "added_by": "catalog"
+      },
+      {
+        "id": "jobriver",
+        "name": "Jobriver (IT jobs Germany)",
+        "enabled": true,
+        "category": "tech_startup",
+        "region": "dach",
+        "coverage": "country",
+        "countries": [
+          "DE"
+        ],
+        "method": "firecrawl_search",
+        "domains": {
+          "DE": "jobriver.de/en/jobs"
+        },
+        "listing_languages": [
+          "de",
+          "en"
+        ],
+        "query_template": "site:{domain} \"{title}\"",
+        "job_url_pattern": "/jobs/[^/]+-\\d+$",
+        "verified": "2026-11-07",
+        "notes": "Pages carry no date the search index can filter on: no time filter, and no city in the query (both returned 0 results).",
+        "search_time_filter": null,
+        "added_by": "catalog"
+      },
+      {
+        "id": "the_hub",
+        "name": "The Hub (Nordic startups)",
+        "enabled": true,
+        "category": "tech_startup",
+        "region": "nordics",
+        "coverage": "country",
+        "countries": [
+          "DK",
+          "SE",
+          "NO",
+          "FI"
+        ],
+        "method": "firecrawl_search",
+        "domains": {
+          "*": "thehub.io/jobs"
+        },
+        "listing_languages": [
+          "en"
+        ],
+        "query_template": "site:{domain} \"{title}\"",
+        "job_url_pattern": "/jobs/[0-9a-f]{24}",
+        "verified": "2026-11-07",
+        "added_by": "catalog"
+      },
+      {
+        "id": "remoteok",
+        "name": "RemoteOK",
+        "enabled": true,
+        "category": "remote",
+        "region": "global",
+        "coverage": "remote_global",
+        "countries": [
+          "*"
+        ],
+        "method": "firecrawl_search",
+        "domains": {
+          "*": "remoteok.com/remote-jobs"
+        },
+        "listing_languages": [
+          "en"
+        ],
+        "query_template": "site:{domain} \"{title}\"",
+        "job_url_pattern": "/remote-jobs/remote-[^/]+-\\d+$",
+        "verified": "2026-11-07",
+        "notes": "Low precision: the title often matches only the sidebar. Scoring filters these out.",
+        "added_by": "catalog"
+      },
+      {
+        "id": "weworkremotely",
+        "name": "We Work Remotely",
+        "enabled": true,
+        "category": "remote",
+        "region": "global",
+        "coverage": "remote_global",
+        "countries": [
+          "*"
+        ],
+        "method": "firecrawl_search",
+        "domains": {
+          "*": "weworkremotely.com/remote-jobs"
+        },
+        "listing_languages": [
+          "en"
+        ],
+        "query_template": "site:{domain} \"{title}\"",
+        "job_url_pattern": "/remote-jobs/(?!search|new)[^/?#]+$",
+        "verified": "2026-11-07",
+        "added_by": "catalog"
+      },
+      {
+        "id": "eu_remote_jobs",
+        "name": "EU Remote Jobs",
+        "enabled": true,
+        "category": "remote",
+        "region": "europe",
+        "coverage": "remote_eu",
+        "countries": [
+          "*"
+        ],
+        "method": "firecrawl_search",
+        "domains": {
+          "*": "euremotejobs.com/job"
+        },
+        "listing_languages": [
+          "en"
+        ],
+        "query_template": "site:{domain} \"{title}\"",
+        "notes": "Remote roles in European time zones (about UTC-1 to UTC+3); some are limited to EU/EEA residents.",
+        "job_url_pattern": "/job/[^/]+/?$",
+        "verified": "2026-11-07",
+        "added_by": "catalog"
+      },
+      {
+        "id": "working_nomads",
+        "name": "Working Nomads",
+        "enabled": true,
+        "category": "remote",
+        "region": "global",
+        "coverage": "remote_global",
+        "countries": [
+          "*"
+        ],
+        "method": "firecrawl_search",
+        "domains": {
+          "*": "workingnomads.com/jobs"
+        },
+        "listing_languages": [
+          "en"
+        ],
+        "query_template": "site:{domain} \"{title}\"",
+        "job_url_pattern": "/jobs/[^/?#]+$",
+        "verified": "2026-11-07",
+        "added_by": "catalog"
+      },
+      {
+        "id": "remote_co",
+        "name": "Remote.co",
+        "enabled": true,
+        "category": "remote",
+        "region": "global",
+        "coverage": "remote_global",
+        "countries": [
+          "*"
+        ],
+        "method": "firecrawl_search",
+        "domains": {
+          "*": "remote.co/job-details"
+        },
+        "listing_languages": [
+          "en"
+        ],
+        "query_template": "site:{domain} \"{title}\"",
+        "job_url_pattern": "/job-details/",
+        "verified": "2026-11-07",
+        "added_by": "catalog"
+      },
+      {
+        "id": "stepstone",
+        "name": "StepStone",
+        "enabled": true,
+        "category": "national",
+        "region": "europe",
+        "coverage": "country",
+        "countries": [
+          "DE",
+          "AT",
+          "BE",
+          "NL"
+        ],
+        "method": "firecrawl_search",
+        "domains": {
+          "DE": "stepstone.de",
+          "AT": "stepstone.at",
+          "BE": "stepstone.be",
+          "NL": "stepstone.nl"
+        },
+        "listing_languages": [
+          "de",
+          "nl",
+          "fr",
+          "en"
+        ],
+        "query_template": "site:{domain} \"{title}\" {location}",
+        "job_url_pattern": "/stellenangebote--.+\\.html",
+        "verified": "2026-11-07",
+        "added_by": "catalog"
+      },
+      {
+        "id": "xing",
+        "name": "XING Jobs",
+        "enabled": true,
+        "category": "national",
+        "region": "dach",
+        "coverage": "country",
+        "countries": [
+          "DE",
+          "AT",
+          "CH"
+        ],
+        "method": "firecrawl_search",
+        "domains": {
+          "*": "xing.com/jobs"
+        },
+        "listing_languages": [
+          "de",
+          "en"
+        ],
+        "query_template": "site:{domain} \"{title}\" {location}",
+        "requires_login_for_full_text": false,
+        "notes": "Live test: full description public without login.",
+        "job_url_pattern": "/jobs/[a-z0-9-]+-\\d+$",
+        "verified": "2026-11-07",
+        "added_by": "catalog"
+      },
+      {
+        "id": "karriere_at",
+        "name": "karriere.at",
+        "enabled": true,
+        "category": "national",
+        "region": "dach",
+        "coverage": "country",
+        "countries": [
+          "AT"
+        ],
+        "method": "firecrawl_search",
+        "domains": {
+          "AT": "karriere.at/jobs"
+        },
+        "listing_languages": [
+          "de"
+        ],
+        "query_template": "site:{domain} \"{title}\" {location}",
+        "job_url_pattern": "/jobs/\\d+$",
+        "verified": "2026-11-07",
+        "notes": "Search mostly returns search-results pages (/jobs/<keyword>/<city>); scrape them for job links.",
+        "added_by": "catalog"
+      },
+      {
+        "id": "jobs_ch",
+        "name": "jobs.ch",
+        "enabled": true,
+        "category": "national",
+        "region": "dach",
+        "coverage": "country",
+        "countries": [
+          "CH"
+        ],
+        "method": "firecrawl_search",
+        "domains": {
+          "CH": "jobs.ch"
+        },
+        "listing_languages": [
+          "de",
+          "fr",
+          "it",
+          "en"
+        ],
+        "query_template": "site:{domain} \"{title}\" {location}",
+        "job_url_pattern": "/(stellenangebote|vacancies|offres-emplois)/detail/",
+        "verified": "2026-11-07",
+        "added_by": "catalog"
+      },
+      {
+        "id": "reed",
+        "name": "Reed",
+        "enabled": true,
+        "category": "national",
+        "region": "uk_ie",
+        "coverage": "country",
+        "countries": [
+          "GB"
+        ],
+        "method": "firecrawl_search",
+        "domains": {
+          "GB": "reed.co.uk/jobs"
+        },
+        "listing_languages": [
+          "en"
+        ],
+        "query_template": "site:{domain} \"{title}\" {location}",
+        "job_url_pattern": "/jobs/[^/]+/\\d+",
+        "verified": "2026-11-07",
+        "notes": "Mix of job pages and search pages.",
+        "added_by": "catalog"
+      },
+      {
+        "id": "cv_library",
+        "name": "CV-Library",
+        "enabled": true,
+        "category": "national",
+        "region": "uk_ie",
+        "coverage": "country",
+        "countries": [
+          "GB"
+        ],
+        "method": "firecrawl_search",
+        "domains": {
+          "GB": "cv-library.co.uk/job"
+        },
+        "listing_languages": [
+          "en"
+        ],
+        "query_template": "site:{domain} \"{title}\" {location}",
+        "job_url_pattern": "/job/\\d+/",
+        "verified": "2026-11-07",
+        "added_by": "catalog"
+      },
+      {
+        "id": "jobs_ie",
+        "name": "Jobs.ie",
+        "enabled": true,
+        "category": "national",
+        "region": "uk_ie",
+        "coverage": "country",
+        "countries": [
+          "IE"
+        ],
+        "method": "firecrawl_search",
+        "domains": {
+          "IE": "jobs.ie"
+        },
+        "listing_languages": [
+          "en"
+        ],
+        "query_template": "site:{domain} \"{title}\" {location}",
+        "job_url_pattern": "/job/.+-job\\d+",
+        "verified": "2026-11-07",
+        "added_by": "catalog"
+      },
+      {
+        "id": "nationale_vacaturebank",
+        "name": "Nationale Vacaturebank",
+        "enabled": true,
+        "category": "national",
+        "region": "benelux",
+        "coverage": "country",
+        "countries": [
+          "NL"
+        ],
+        "method": "firecrawl_search",
+        "domains": {
+          "NL": "nationalevacaturebank.nl/vacature"
+        },
+        "listing_languages": [
+          "nl"
+        ],
+        "query_template": "site:{domain} \"{title}\" {location}",
+        "job_url_pattern": "/vacature/[0-9a-f-]{36}/",
+        "verified": "2026-11-07",
+        "added_by": "catalog"
+      },
+      {
+        "id": "jobindex",
+        "name": "Jobindex",
+        "enabled": true,
+        "category": "national",
+        "region": "nordics",
+        "coverage": "country",
+        "countries": [
+          "DK"
+        ],
+        "method": "firecrawl_search",
+        "domains": {
+          "DK": "jobindex.dk"
+        },
+        "listing_languages": [
+          "da",
+          "en"
+        ],
+        "query_template": "site:{domain} \"{title}\" {location}",
+        "job_url_pattern": "/jobannonce/",
+        "verified": "2026-11-07",
+        "notes": "Mix of job pages (/jobannonce/) and search pages (/jobsoegning).",
+        "added_by": "catalog"
+      },
+      {
+        "id": "platsbanken",
+        "name": "Platsbanken (Arbetsförmedlingen, Swedish public employment service)",
+        "enabled": true,
+        "category": "public_employment_service",
+        "region": "nordics",
+        "coverage": "country",
+        "countries": [
+          "SE"
+        ],
+        "method": "firecrawl_search",
+        "domains": {
+          "SE": "arbetsformedlingen.se/platsbanken/annonser"
+        },
+        "listing_languages": [
+          "sv"
+        ],
+        "query_template": "site:{domain} \"{title}\" {location}",
+        "job_url_pattern": "/annonser/\\d+",
+        "verified": "2026-11-07",
+        "notes": "Live test: full text in Swedish. The search location is loose (a 'Stockholm' query returned an Östhammar job); the location pre-filter handles it.",
+        "added_by": "catalog"
+      },
+      {
+        "id": "infojobs",
+        "name": "InfoJobs",
+        "enabled": true,
+        "category": "national",
+        "region": "southern_europe",
+        "coverage": "country",
+        "countries": [
+          "ES"
+        ],
+        "method": "firecrawl_search",
+        "domains": {
+          "ES": "infojobs.net"
+        },
+        "listing_languages": [
+          "es"
+        ],
+        "query_template": "site:{domain} \"{title}\" {location}",
+        "job_url_pattern": "/of-i[0-9a-f]+",
+        "verified": "2026-11-07",
+        "notes": "Mix of job pages (/of-i…) and search pages (/ofertas-trabajo/…).",
+        "added_by": "catalog"
+      },
+      {
+        "id": "tecnoempleo",
+        "name": "Tecnoempleo (IT jobs Spain)",
+        "enabled": true,
+        "category": "tech_startup",
+        "region": "southern_europe",
+        "coverage": "country",
+        "countries": [
+          "ES"
+        ],
+        "method": "firecrawl_search",
+        "domains": {
+          "ES": "tecnoempleo.com"
+        },
+        "listing_languages": [
+          "es"
+        ],
+        "query_template": "site:{domain} \"{title}\" {location}",
+        "job_url_pattern": "/rf-[0-9a-f]+",
+        "verified": "2026-11-07",
+        "added_by": "catalog"
+      },
+      {
+        "id": "net_empregos",
+        "name": "Net-Empregos",
+        "enabled": true,
+        "category": "national",
+        "region": "southern_europe",
+        "coverage": "country",
+        "countries": [
+          "PT"
+        ],
+        "method": "firecrawl_search",
+        "domains": {
+          "PT": "net-empregos.com"
+        },
+        "listing_languages": [
+          "pt"
+        ],
+        "query_template": "site:{domain} \"{title}\" {location}",
+        "job_url_pattern": "net-empregos\\.com/\\d+/",
+        "verified": "2026-11-07",
+        "notes": "Mix of job pages (/<id>/…) and category pages.",
+        "added_by": "catalog"
+      },
+      {
+        "id": "jobs_cz",
+        "name": "Jobs.cz",
+        "enabled": true,
+        "category": "national",
+        "region": "cee",
+        "coverage": "country",
+        "countries": [
+          "CZ"
+        ],
+        "method": "firecrawl_search",
+        "domains": {
+          "CZ": "jobs.cz"
+        },
+        "listing_languages": [
+          "cs",
+          "en"
+        ],
+        "query_template": "site:{domain} \"{title}\" {location}",
+        "job_url_pattern": "/rpd/\\d+",
+        "verified": "2026-11-07",
+        "notes": "Search returns only search-results pages (/prace/…); scrape them for /rpd/<id> job links. The /rpd path filter and the time filter returned 0 results.",
+        "search_time_filter": null,
+        "added_by": "catalog"
+      },
+      {
+        "id": "profesia",
+        "name": "Profesia",
+        "enabled": true,
+        "category": "national",
+        "region": "cee",
+        "coverage": "country",
+        "countries": [
+          "SK"
+        ],
+        "method": "firecrawl_search",
+        "domains": {
+          "SK": "profesia.sk/praca"
+        },
+        "listing_languages": [
+          "sk",
+          "en"
+        ],
+        "query_template": "site:{domain} \"{title}\" {location}",
+        "job_url_pattern": "/O\\d+",
+        "verified": "2026-11-07",
+        "notes": "Search returns only search-results pages; scrape them for /O<id> job links.",
+        "added_by": "catalog"
+      },
+      {
+        "id": "ejobs",
+        "name": "eJobs",
+        "enabled": true,
+        "category": "national",
+        "region": "cee",
+        "coverage": "country",
+        "countries": [
+          "RO"
+        ],
+        "method": "firecrawl_search",
+        "domains": {
+          "RO": "ejobs.ro/user/locuri-de-munca"
+        },
+        "listing_languages": [
+          "ro",
+          "en"
+        ],
+        "query_template": "site:{domain} \"{title}\" {location}",
+        "job_url_pattern": "/locuri-de-munca/[^/]+/\\d+",
+        "verified": "2026-11-07",
+        "added_by": "catalog"
+      }
+    ],
+    "custom_boards": [
+      {
+        "id": "my_local_board",
+        "name": "Example: a board you want to add (e.g. pracuj.pl, bulldogjob.pl, hellowork.com)",
+        "enabled": false,
+        "category": "national",
+        "region": "cee",
+        "coverage": "country",
+        "countries": [
+          "PL"
+        ],
+        "method": "firecrawl_search",
+        "domains": {
+          "PL": "pracuj.pl/praca"
+        },
+        "listing_languages": [
+          "pl"
+        ],
+        "query_template": "site:{domain} \"{title}\" {location}",
+        "added_by": "user"
+      }
+    ],
+    "company_watchlist": [
+      {
+        "company": "Example GmbH",
+        "careers_url": "https://example.com/careers",
+        "priority": "A",
+        "title_keywords": []
+      }
+    ]
+  },
+  "scoring": {
+    "min_fit_score": 75,
+    "original_cv_ok_threshold": 88,
+    "strictness": "strict",
+    "weights": {
+      "role_and_seniority": 0.35,
+      "hard_skills_and_tools": 0.35,
+      "domain_and_responsibilities": 0.3
+    },
+    "penalties": {
+      "years_required_gap_per_year": 10,
+      "missing_required_language_cap": 20,
+      "location_or_work_mode_mismatch": "drop"
+    }
+  },
+  "cv": {
+    "max_pages": 1,
+    "page_size": "A4",
+    "margins_inch": {
+      "top": 0.5,
+      "bottom": 0.5,
+      "left": 0.5,
+      "right": 0.5
+    },
+    "font_family": "Arial",
+    "font_size_body_pt": 10,
+    "accent_color": "#215E99",
+    "section_order": [
+      "summary",
+      "skills",
+      "experience",
+      "education",
+      "certifications",
+      "languages"
+    ],
+    "summary_max_lines": 4,
+    "bullets_most_recent_role": {
+      "min": 3,
+      "max": 4
+    },
+    "bullets_older_roles": {
+      "min": 2,
+      "max": 3
+    },
+    "max_roles_shown": 4,
+    "min_quantified_bullets": 3,
+    "show_learning_line": true,
+    "max_learning_items": 3,
+    "output_formats": [
+      "pdf"
+    ],
+    "file_name_template": "CV_{full_name}_{company}_{date}",
+    "local_output_dir": "output_resumes",
+    "never_overwrite": true
+  },
+  "tracking": {
+    "storage": "google_sheets",
+    "local_state_file": "runs/tracker.json",
+    "tab_strategy": "weekly",
+    "tab_name_template": "Week_{iso_week}_{year}",
+    "columns": [
+      "Job Title",
+      "Company",
+      "Location / Work Type",
+      "Fit Score (%)",
+      "Posted Date",
+      "Source",
+      "Apply Link",
+      "CV Action",
+      "Tailored CV Link",
+      "Application Status",
+      "AI Fit & Tailoring Notes",
+      "ATS Keywords Matched",
+      "ATS Keywords Missing",
+      "Job ID"
+    ],
+    "statuses": [
+      "New",
+      "Applied",
+      "Interviewing",
+      "Offer",
+      "Rejected",
+      "Skipped"
+    ],
+    "closed_statuses": [
+      "Applied",
+      "Interviewing",
+      "Offer",
+      "Rejected",
+      "Skipped"
+    ]
+  },
+  "integrations": {
+    "firecrawl": {
+      "required": true,
+      "mode": "mcp",
+      "api_key_env": "FIRECRAWL_API_KEY",
+      "scrape_formats": [
+        "markdown"
+      ],
+      "only_main_content": true,
+      "max_scrapes_per_run": 80,
+      "rate_limit_per_minute": 10,
+      "search_results_per_query": 20,
+      "search_time_filter": "qdr:w",
+      "status": "unchecked",
+      "last_checked_at": null
+    },
+    "apify": {
+      "required": false,
+      "mode": "mcp",
+      "api_token_env": "APIFY_TOKEN",
+      "use_for": [
+        "linkedin",
+        "scheduled_runs"
+      ],
+      "status": "unchecked",
+      "last_checked_at": null,
+      "max_results_per_search": 50,
+      "fallback_to_firecrawl": true
+    },
+    "google": {
+      "required": true,
+      "drive": {
+        "root_folder_name": "Job Search Full-Ops Agent",
+        "root_folder_id": null,
+        "cv_subfolder_name": "Tailored CVs",
+        "cv_subfolder_id": null
+      },
+      "sheets": {
+        "tracking_spreadsheet_id": null,
+        "template_tab_name": "Template"
+      },
+      "gmail": {
+        "enabled": true
+      },
+      "permissions": {
+        "create_files_in_drive": false,
+        "granted_at": null
+      },
+      "status": "unchecked",
+      "last_checked_at": null
+    }
+  },
+  "notifications": {
+    "email": {
+      "enabled": true,
+      "provider": "gmail_mcp",
+      "recipients": [
+        "you@example.com"
+      ],
+      "subject_template": "[Job Match Digest] {new_count} new roles — {date}",
+      "min_fit_to_include": 75,
+      "near_miss_margin": 10,
+      "max_rows_in_table": 15,
+      "link_tracking_sheet": true,
+      "link_tailored_cvs": true,
+      "send_when_no_matches": false
+    },
+    "schedule": {
+      "enabled": true,
+      "orchestrator": "claude_scheduled_task",
+      "days": [
+        "MON",
+        "WED",
+        "FRI"
+      ],
+      "time": "21:00",
+      "timezone": "Europe/Berlin",
+      "catch_up_missed_runs": true
+    }
+  },
+  "onboarding": {
+    "completed": false,
+    "completed_at": null,
+    "last_completed_phase": null
+  }
+}

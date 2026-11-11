@@ -1,0 +1,202 @@
+{
+  "$schema": "../schemas/cv_content.schema.json",
+  "job_id": "stepstone-123456",
+  "company": "Example Fintech GmbH",
+  "header": {
+    "name": "Alex Example",
+    "headline": "Senior Product Manager | B2B SaaS | Monetization",
+    "contact": [
+      {
+        "text": "Berlin, Germany"
+      },
+      {
+        "text": "+49 000 000 0000"
+      },
+      {
+        "text": "alex.example@example.com",
+        "url": "mailto:alex.example@example.com"
+      },
+      {
+        "text": "LinkedIn",
+        "url": "https://www.linkedin.com/in/alex-example/"
+      }
+    ]
+  },
+  "summary": "Product Manager with 6+ years in B2B SaaS, owning discovery-to-launch for analytics and billing products used by 4,000+ companies. Led the move to usage-based pricing and data-driven checkout optimisation, with hands-on stakeholder management across Engineering, Finance and Sales.",
+  "skills": [
+    "Product discovery",
+    "Roadmapping",
+    "Pricing & monetization",
+    "A/B testing",
+    "Stakeholder management",
+    "OKRs"
+  ],
+  "tools": [
+    "Jira",
+    "Confluence",
+    "Amplitude",
+    "Mixpanel",
+    "SQL",
+    "Figma",
+    "Stripe"
+  ],
+  "learning": [
+    "Looker"
+  ],
+  "experience": [
+    {
+      "role_id": "acme_pm",
+      "title": "Senior Product Manager",
+      "company": "Acme Analytics",
+      "location": "Berlin (hybrid)",
+      "dates": "Mar 2023 – Present",
+      "tagline": "Self-serve product analytics platform for mid-market companies.",
+      "bullets": [
+        "Led migration of 4,000+ accounts from seat- to usage-based pricing, lifting net revenue retention by 18% in 12 months via a phased 3-cohort rollout.",
+        "Redesigned self-serve checkout after funnel analysis showed a plan-selection drop-off; ran A/B testing of 3 variants with 2 squads, raising trial-to-paid conversion by 27% in one quarter.",
+        "Cut invoice disputes from ~120 to ~35 per month by leading the billing re-architecture onto Stripe Billing and an internal metering service.",
+        "Run quarterly product discovery and user research with 15-20 customer interviews plus funnel analysis in Amplitude and SQL to set the roadmap for 3 squads."
+      ]
+    },
+    {
+      "role_id": "beta_apm",
+      "title": "Product Manager",
+      "company": "Beta Logistics",
+      "location": "Madrid",
+      "dates": "Jan 2020 – Feb 2023",
+      "bullets": [
+        "Shipped ML-based ETA prediction to 40 carriers, cutting late deliveries by 22% within 6 months.",
+        "Owned the driver mobile app and dispatcher web console, turning carrier operations pain points into a quarterly roadmap with Engineering and key accounts.",
+        "Shortened carrier onboarding from 10 to 3 days with a self-serve flow."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "degree": "MSc Business Informatics",
+      "dates": "2017 – 2019",
+      "institution": "Example University"
+    }
+  ],
+  "certifications": [
+    {
+      "name": "Professional Scrum Product Owner I (PSPO I)",
+      "issuer": "Scrum.org"
+    }
+  ],
+  "languages": [
+    {
+      "language": "English",
+      "level": "C2"
+    },
+    {
+      "language": "German",
+      "level": "B2"
+    },
+    {
+      "language": "Spanish",
+      "level": "Native"
+    }
+  ],
+  "target_keywords": [
+    {
+      "keyword": "pricing",
+      "status": "matched",
+      "priority": "must",
+      "evidence": "Pricing & monetization",
+      "placed_in": [
+        "summary",
+        "skills",
+        "experience"
+      ]
+    },
+    {
+      "keyword": "monetization",
+      "status": "matched",
+      "priority": "must",
+      "evidence": "Pricing & monetization",
+      "placed_in": [
+        "headline",
+        "skills"
+      ]
+    },
+    {
+      "keyword": "A/B testing",
+      "status": "matched",
+      "priority": "must",
+      "evidence": "A/B testing",
+      "placed_in": [
+        "skills",
+        "experience"
+      ]
+    },
+    {
+      "keyword": "stakeholder management",
+      "status": "matched",
+      "priority": "must",
+      "evidence": "Stakeholder management",
+      "placed_in": [
+        "summary",
+        "skills"
+      ]
+    },
+    {
+      "keyword": "product discovery",
+      "status": "matched",
+      "priority": "must",
+      "evidence": "Product discovery",
+      "placed_in": [
+        "skills",
+        "experience"
+      ]
+    },
+    {
+      "keyword": "SQL",
+      "status": "matched",
+      "priority": "must",
+      "evidence": "SQL",
+      "placed_in": [
+        "tools",
+        "experience"
+      ]
+    },
+    {
+      "keyword": "customer interviews",
+      "status": "matched",
+      "priority": "nice",
+      "evidence": "15-20 customer interviews per quarter",
+      "placed_in": [
+        "experience"
+      ]
+    },
+    {
+      "keyword": "user research",
+      "status": "matched_synonym",
+      "priority": "must",
+      "evidence": "15-20 customer interviews per quarter",
+      "placed_in": [
+        "experience"
+      ]
+    },
+    {
+      "keyword": "Looker",
+      "status": "learning",
+      "priority": "nice",
+      "evidence": "Looker",
+      "placed_in": [
+        "learning"
+      ]
+    },
+    {
+      "keyword": "dbt",
+      "status": "missing",
+      "priority": "nice"
+    }
+  ],
+  "derived_numbers": [
+    {
+      "value": "6",
+      "basis": "acme_pm (2023-03 to present) + beta_apm (2020-01 to 2023-02)"
+    }
+  ]
+}
